@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <!-- Form starts -->
+        <form #myForm="ngForm" (submit)="submitForm(myForm)" novalidate>
+          <div class="form-check d-inline-block pb-3 pt-3">
+            <input class="form-check-input" type="radio" name="period" value="hourly" id="hourly" ngModel
+              checked="checked" />
+            <label class="form-check-label" for="hourly">
+              Hourly
+            </label>
+          </div>
+          <div class="form-check d-inline-block" style="margin-left:10px;">
+            <input class="form-check-input" type="radio" name="period" id="daily" value="daily" ngModel />
+            <label class="form-check-label" for="daily">
+              Daily
+            </label>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" class="form-control" placeholder="City name" aria-label="City name"
+              aria-describedby="City name" name="cityName" ngModel required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            Check weather
+          </button>
+
+        </form>
+        <!-- Form ends -->
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="row">
+      <template #weatherDisplay></template>
+    </div>
+  </div>
+</div>
