@@ -28,6 +28,7 @@ export class WeatherDetailViewFactory {
 
     return this.componentRef;
   }
+
   private getFactory(): ComponentFactory<any> {
     return this.searchParams.period === 'daily'
       ? this.resolver.resolveComponentFactory(WfDailyComponent)
