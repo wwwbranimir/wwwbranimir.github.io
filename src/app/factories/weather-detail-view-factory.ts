@@ -1,3 +1,4 @@
+import { SearchParams } from 'src/app/models/search-params.model';
 import { WfHourlyComponent } from './../components/wf-hourly/wf-hourly.component';
 import { WfDailyComponent } from './../components/wf-daily/wf-daily.component';
 import {
@@ -7,29 +8,29 @@ import {
 } from '@angular/core';
 
 export class WeatherDetailViewFactory {
-  componentRef: ComponentRef<any>;
+  componentRef: ComponentRef<WfDailyComponent | WfHourlyComponent>;
 
   public constructor(
-    private searchParams,
+    private searchParams: SearchParams,
     private container,
     private resolver: ComponentFactoryResolver
   ) {}
 
-  public createComponent(): ComponentRef<any> {
+  public createComponent(): ComponentRef<WfDailyComponent | WfHourlyComponent> {
+    this.container.clear();
+
     if (!this.searchParams) {
-      this.container.clear();
       return null;
     }
 
-    this.container.clear();
-    const factory: ComponentFactory<any> = this.getFactory();
+    const factory: ComponentFactory<WfDailyComponent | WfHourlyComponent> = this.getFactory();
     this.componentRef = this.container.createComponent(factory);
     this.componentRef.instance.searchParams = this.searchParams;
 
     return this.componentRef;
   }
 
-  private getFactory(): ComponentFactory<any> {
+  private getFactory(): ComponentFactory<WfDailyComponent | WfHourlyComponent> {
     return this.searchParams.period === 'daily'
       ? this.resolver.resolveComponentFactory(WfDailyComponent)
       : this.resolver.resolveComponentFactory(WfHourlyComponent);

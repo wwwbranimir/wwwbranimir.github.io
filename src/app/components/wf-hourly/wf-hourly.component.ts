@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-wf-hourly',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./wf-hourly.component.css']
 })
 export class WfHourlyComponent implements OnInit {
-
+  @Input() searchParams: any;
   constructor() { }
 
   ngOnInit(): void {

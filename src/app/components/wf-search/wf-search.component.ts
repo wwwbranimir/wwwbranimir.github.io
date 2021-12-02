@@ -1,3 +1,4 @@
+import { SearchParams } from 'src/app/models/search-params.model';
 import {
   Component,
   ComponentFactoryResolver,
@@ -17,12 +18,14 @@ export class WfSearchComponent {
   @ViewChild('weatherDisplay', { read: ViewContainerRef }) container;
   componentRef: ComponentRef<any>;
 
-  isSubmitted = false;
-
   constructor(private resolver: ComponentFactoryResolver) {}
 
-  createComponent(searchParams: any) : void {
-    const viewFactory = new WeatherDetailViewFactory(searchParams, this.container, this.resolver);
+  createComponent(searchParams: SearchParams): void {
+    const viewFactory = new WeatherDetailViewFactory(
+      searchParams,
+      this.container,
+      this.resolver
+    );
     this.componentRef = viewFactory.createComponent();
   }
 
@@ -31,11 +34,13 @@ export class WfSearchComponent {
   }
 
   submitForm(form: NgForm): boolean {
-    this.isSubmitted = true;
+
     if (!form.valid) {
       return false;
     }
-    this.createComponent(form.value);
+    const searchParams: SearchParams = form.value;
+    this.createComponent(searchParams);
     return true;
+
   }
 }
