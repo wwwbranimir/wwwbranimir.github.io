@@ -1,4 +1,4 @@
 export interface SearchParams {
-  period: string;
+  mode: string;
   cityName: string;
 }

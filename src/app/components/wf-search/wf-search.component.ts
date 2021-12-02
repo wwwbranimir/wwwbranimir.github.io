@@ -1,3 +1,4 @@
+import { WeatherConditions } from 'src/app/models/weatherconditions.model';
 import { WfLoadAction } from './../../store/actions/wf.actions';
 import { GlobalState } from './../../store/states/global.state';
 
@@ -24,6 +25,7 @@ import { ActivatedRoute } from '@angular/router';
 export class WfSearchComponent implements AfterViewInit {
   @ViewChild('weatherDisplay', { read: ViewContainerRef }) container;
   componentRef: ComponentRef<any>;
+  weatherConditions: WeatherConditions;
 
   public constructor(
     private readonly resolver: ComponentFactoryResolver,
@@ -34,7 +36,7 @@ export class WfSearchComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     this.route.queryParams.subscribe((params) => {
       const searchParams: SearchParams = {
-        period: params.mode,
+        mode: params.mode,
         cityName: params.city,
       };
       this.loadWeatherConditions(searchParams);
@@ -68,7 +70,7 @@ export class WfSearchComponent implements AfterViewInit {
     this.store.dispatch(
       new WfLoadAction({
         cityName: searchParams.cityName,
-        period: searchParams.period,
+        mode: searchParams.mode,
       } as SearchParams)
     );
   }
