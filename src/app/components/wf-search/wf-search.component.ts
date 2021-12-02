@@ -1,3 +1,6 @@
+import { WfLoadAction } from './../../store/actions/wf.actions';
+import { GlobalState } from './../../store/states/global.state';
+
 import { SearchParams } from 'src/app/models/search-params.model';
 import {
   Component,
@@ -8,6 +11,7 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { WeatherDetailViewFactory } from 'src/app/factories/weather-detail-view-factory';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'wf-search',
@@ -18,7 +22,10 @@ export class WfSearchComponent {
   @ViewChild('weatherDisplay', { read: ViewContainerRef }) container;
   componentRef: ComponentRef<any>;
 
-  constructor(private resolver: ComponentFactoryResolver) {}
+  public constructor(
+    private readonly resolver: ComponentFactoryResolver,
+    public readonly store: Store<GlobalState>
+  ) {}
 
   createComponent(searchParams: SearchParams): void {
     const viewFactory = new WeatherDetailViewFactory(
@@ -34,13 +41,21 @@ export class WfSearchComponent {
   }
 
   submitForm(form: NgForm): boolean {
-
     if (!form.valid) {
       return false;
     }
     const searchParams: SearchParams = form.value;
+
     this.createComponent(searchParams);
     return true;
+  }
 
+  private loadWeatherConditions(searchParams: SearchParams) {
+    this.store.dispatch(
+      new WfLoadAction({
+        cityName: searchParams.cityName,
+        period: searchParams.period,
+      } as SearchParams)
+    );
   }
 }
