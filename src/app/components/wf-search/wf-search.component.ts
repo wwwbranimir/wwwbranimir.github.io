@@ -3,6 +3,7 @@ import { GlobalState } from './../../store/states/global.state';
 
 import { SearchParams } from 'src/app/models/search-params.model';
 import {
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -20,7 +21,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './wf-search.component.html',
   styleUrls: ['./wf-search.component.css'],
 })
-export class WfSearchComponent implements OnInit {
+export class WfSearchComponent implements AfterViewInit {
   @ViewChild('weatherDisplay', { read: ViewContainerRef }) container;
   componentRef: ComponentRef<any>;
 
@@ -30,7 +31,7 @@ export class WfSearchComponent implements OnInit {
     private readonly route: ActivatedRoute
   ) {}
 
-  public ngOnInit(): void {
+  public ngAfterViewInit(): void {
     this.route.queryParams.subscribe((params) => {
       const searchParams: SearchParams = {
         period: params.mode,
