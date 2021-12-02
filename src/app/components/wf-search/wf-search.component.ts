@@ -1,13 +1,12 @@
-import { WfDailyComponent } from './../wf-daily/wf-daily.component';
 import {
   Component,
-  ComponentFactory,
   ComponentFactoryResolver,
   ComponentRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { WeatherDetailViewFactory } from 'src/app/factories/weather-detail-view-factory';
 
 @Component({
   selector: 'wf-search',
@@ -16,23 +15,15 @@ import { NgForm } from '@angular/forms';
 })
 export class WfSearchComponent {
   @ViewChild('weatherDisplay', { read: ViewContainerRef }) container;
-  componentRef: ComponentRef<WfDailyComponent>;
+  componentRef: ComponentRef<any>;
 
   isSubmitted = false;
 
   constructor(private resolver: ComponentFactoryResolver) {}
 
   createComponent(searchParams: any) : void {
-    //TODO: move this into separate factory
-    if (searchParams.period === 'daily') {
-      this.container.clear();
-      const factory: ComponentFactory<WfDailyComponent> =
-        this.resolver.resolveComponentFactory(WfDailyComponent);
-      this.componentRef = this.container.createComponent(factory);
-      this.componentRef.instance.searchParams = searchParams;
-      return;
-    }
-    this.container.clear();
+    const viewFactory = new WeatherDetailViewFactory(searchParams, this.container, this.resolver);
+    this.componentRef = viewFactory.createComponent();
   }
 
   ngOnDestroy() {
