@@ -1,10 +1,16 @@
+import { WfState } from './../../store/states/wf.state';
+import {
+  selectAllWf,
+  selectWfEntities,
+  selectWfIds,
+} from './../../store/selectors/wf.selectors';
+
+import { WeatherForecastService } from './../../services/weather-forecast.service';
 import { WeatherConditions } from 'src/app/models/weatherconditions.model';
 import { WfLoadAction } from './../../store/actions/wf.actions';
-import { GlobalState } from './../../store/states/global.state';
 
 import { SearchParams } from 'src/app/models/search-params.model';
 import {
-  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -14,38 +20,41 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { WeatherDetailViewFactory } from 'src/app/factories/weather-detail-view-factory';
-import { Store } from '@ngrx/store';
-import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'wf-search',
   templateUrl: './wf-search.component.html',
   styleUrls: ['./wf-search.component.css'],
 })
-export class WfSearchComponent implements AfterViewInit {
+export class WfSearchComponent implements OnInit {
   @ViewChild('weatherDisplay', { read: ViewContainerRef }) container;
   componentRef: ComponentRef<any>;
   weatherConditions: WeatherConditions;
+  searchParams: SearchParams;
 
   public constructor(
     private readonly resolver: ComponentFactoryResolver,
-    public readonly store: Store<GlobalState>,
-    private readonly route: ActivatedRoute
+    public store: Store<WfState>,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly service: WeatherForecastService
   ) {}
 
-  public ngAfterViewInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      const searchParams: SearchParams = {
+  public ngOnInit(): void {
+    this.route.queryParams.subscribe((params): void => {
+      this.searchParams = {
         mode: params.mode,
-        cityName: params.city,
-      };
-      this.loadWeatherConditions(searchParams);
+        cityName: params.cityName
+      } as SearchParams;
+      this.loadWeatherConditions(this.searchParams);
     });
   }
 
-  createComponent(searchParams: SearchParams): void {
+  createComponent(): void {
     const viewFactory = new WeatherDetailViewFactory(
-      searchParams,
+      this.searchParams,
       this.container,
       this.resolver
     );
@@ -60,18 +69,33 @@ export class WfSearchComponent implements AfterViewInit {
     if (!form.valid) {
       return false;
     }
-    const searchParams: SearchParams = form.value;
+    this.searchParams = form.value;
+    //TODO: move this to utilities
+    this.router.navigate([], {
+      queryParams: {
+        mode: this.searchParams.mode,
+        cityName: this.searchParams.cityName,
+      },
+      queryParamsHandling: 'merge',
+    });
 
-    this.createComponent(searchParams);
+    this.createComponent();
     return true;
   }
 
   private loadWeatherConditions(searchParams: SearchParams): void {
     this.store.dispatch(
       new WfLoadAction({
-        cityName: searchParams.cityName,
-        mode: searchParams.mode,
+        cityName: this.searchParams.cityName,
+        mode: this.searchParams.mode,
       } as SearchParams)
     );
+
+    this.store.pipe(select(selectWfIds)).subscribe(store=> {
+      if (store.length > 0) {
+        this.store.pipe(select(selectAllWf)).subscribe(w =>{});
+      }
+    });
+
   }
 }

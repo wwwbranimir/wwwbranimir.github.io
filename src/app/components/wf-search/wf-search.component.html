@@ -5,14 +5,14 @@
         <!-- Form starts -->
         <form #myForm="ngForm" (submit)="submitForm(myForm)" novalidate>
           <div class="form-check d-inline-block pb-3 pt-3">
-            <input class="form-check-input" type="radio" name="mode" value="hourly" id="hourly" ngModel
+            <input class="form-check-input" type="radio" name="mode" value="hourly" id="hourly" [(ngModel)] = "searchParams.mode"
               checked="checked" />
             <label class="form-check-label" for="hourly">
               Hourly
             </label>
           </div>
           <div class="form-check d-inline-block" style="margin-left:10px;">
-            <input class="form-check-input" type="radio" name="mode" id="daily" value="daily" ngModel />
+            <input class="form-check-input" type="radio" name="mode" id="daily" value="daily" [(ngModel)] ="searchParams.mode" />
             <label class="form-check-label" for="daily">
               Daily
             </label>
@@ -22,7 +22,7 @@
               <span class="input-group-text" id="basic-addon1">@</span>
             </div>
             <input type="text" class="form-control" placeholder="City name" aria-label="City name"
-              aria-describedby="City name" name="cityName" ngModel required>
+              aria-describedby="City name" name="cityName" [(ngModel)]="searchParams.cityName" required>
           </div>
           <button type="submit" class="btn btn-primary btn-block">
             Check weather

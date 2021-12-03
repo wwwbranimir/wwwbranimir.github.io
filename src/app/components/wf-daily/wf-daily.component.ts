@@ -7,7 +7,6 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class WfDailyComponent implements OnInit {
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+}
   @Input() searchParams: any;
 }

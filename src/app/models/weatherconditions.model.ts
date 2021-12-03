@@ -4,7 +4,7 @@ import { Mode } from './mode.model';
 import { TimeZone } from './timezone.model';
 
 export interface WeatherConditions {
-  searchParams: SearchParams;
+  params: SearchParams;
   geoLocation: GeoLocation;
   timeZone: TimeZone;
   mode: Mode;

@@ -3,7 +3,7 @@ import { SearchParams } from 'src/app/models/search-params.model';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, catchError, withLatestFrom } from 'rxjs/operators';
 
 import { WfActionType, WfLoadAction, WfLoadFailAction, WfLoadSuccessAction } from '../actions/wf.actions';
 import { WeatherConditions } from 'src/app/models/weatherconditions.model';
@@ -19,7 +19,7 @@ export class WfEffects {
       switchMap((params: SearchParams) =>
         this.service.getWeatherForecast(params).pipe(
           map((response: WeatherConditions) => new WfLoadSuccessAction(response)),
-          catchError((error) => of(new WfLoadFailAction(error)))
+          catchError(error => of(new WfLoadFailAction(error)))
         )
       )
     );

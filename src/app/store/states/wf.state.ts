@@ -7,7 +7,7 @@ export interface WfState extends EntityState<WeatherConditions> {
 }
 
 export const wfAdapter: EntityAdapter<WeatherConditions> = createEntityAdapter<WeatherConditions>({
-  selectId: (wc: WeatherConditions) => `${wc.searchParams.mode}-${wc.searchParams.cityName}`
+  selectId: (wc: WeatherConditions) => `${wc.params.mode}-${wc.params.cityName}`
 });
 
 export const initialWfState: WfState = wfAdapter.getInitialState({
