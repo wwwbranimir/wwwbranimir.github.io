@@ -1,6 +1,10 @@
 import { WeatherForecastService } from '../../services/weather-forecast.service';
 import { Injectable } from '@angular/core';
-import { Actions } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import * as WeatherActions from './../actions/weather.actions';
+import * as WeatherApiActions from './../actions/weather.api.actions';
+import { catchError, concatMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 
 
@@ -9,15 +13,16 @@ import { Actions } from '@ngrx/effects';
 export class WeatherEffects {
   constructor(private readonly service: WeatherForecastService, private readonly actions$: Actions) { }
 
-  // @Effect()
-  // public loadWeather$ = this.actions$
-  //   .pipe(ofType<WeatherActions.getWeather>(action=> action.payload),
-  //     map(action => action.payload),
-  //     switchMap((params: SearchParams) =>
-  //       this.service.getWeatherForecast(params).pipe(
-  //         map((response: WeatherConditions) => new WfLoadSuccessAction(response)),
-  //         catchError(error => of(new WfLoadFailAction(error)))
-  //       )
-  //     )
-  //   );
+  @Effect()
+  public loadWeather$ = this.actions$
+    .pipe(
+      ofType(WeatherActions.getWeather),
+      concatMap(action =>
+        this.service.getWeatherForecast(action.weather)
+        .pipe(
+          map(weather => WeatherApiActions.loadWeatherSuccess({weather}),
+          catchError(error => of(WeatherApiActions.loadWeatherFailure({error})))
+        )
+      )
+    ));
 }

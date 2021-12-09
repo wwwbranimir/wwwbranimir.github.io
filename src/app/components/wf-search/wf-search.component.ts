@@ -66,11 +66,6 @@ export class WfSearchComponent implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
     });
 
-    this.sub$ = this.service
-      .getWeatherForecast(this.searchParams)
-      .subscribe(wc => {
-        this.selectedWeatherCondition = wc;
-      });
 
     return true;
   }
