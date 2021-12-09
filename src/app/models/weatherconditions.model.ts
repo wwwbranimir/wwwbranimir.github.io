@@ -1,11 +1,12 @@
 import { SearchParams } from 'src/app/models/search-params.model';
-import { GeoLocation } from './geolocation.model';
-import { Mode } from './mode.model';
-import { TimeZone } from './timezone.model';
-
+import { Daily } from './daily-model';
+import { Hourly } from './hourly-model';
 export interface WeatherConditions {
   params: SearchParams;
-  geoLocation: GeoLocation;
-  timeZone: TimeZone;
-  mode: Mode;
+  lat: number;
+  lon: number;
+  timezone: string;
+  timezone_offset: number;
+  daily: Daily[];
+  hourly: Hourly[];
 }

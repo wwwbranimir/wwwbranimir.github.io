@@ -5,11 +5,11 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: 'weather-forecast', component: WfSearchComponent },
   { path: '', redirectTo: '/weather-forecast', pathMatch: 'full' },
-  { path: '**', redirectTo: '/weather-forecast' }
+  { path: '**', redirectTo: '/weather-forecast' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
